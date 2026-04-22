@@ -137,31 +137,7 @@ def esewa_pay(request):
         'esewa_url' : settings.ESEWA_PAYMENT_URL,
     })
 
-def esewa_mock_gateway(request):
-    if request.method == 'POST':
-        action           = request.POST.get('action')
-        total_amount     = request.POST.get('total_amount')
-        transaction_uuid = request.POST.get('transaction_uuid')
-        product_code     = request.POST.get('product_code')
-        success_url      = request.POST.get('success_url')
-        failure_url      = request.POST.get('failure_url')
 
-        if action == 'pay':
-            response_data = {
-                'transaction_code': 'MOCK' + transaction_uuid,
-                'status'          : 'COMPLETE',
-                'total_amount'    : total_amount,
-                'transaction_uuid': transaction_uuid,
-                'product_code'    : product_code,
-            }
-            encoded = base64.b64encode(
-                json.dumps(response_data).encode()
-            ).decode()
-            return redirect(f"{success_url}?data={encoded}")
-        else:
-            return redirect(failure_url)
-
-    return redirect('product_list')
 
 def payment_success(request):
     order_id = request.session.get('order_id')
@@ -171,21 +147,30 @@ def payment_success(request):
     order = get_object_or_404(Order, id=order_id)
     data = request.GET.get('data', '')
 
+    print(f"=== Payment Success ===", flush=True)
+    print(f"Raw data: {data}", flush=True)
+    print(f"GET params: {request.GET}", flush=True)
+    print("======================", flush=True)
+
     try:
-        decoded       = base64.b64decode(data).decode('utf-8')
+        decoded = base64.b64decode(data + '==').decode('utf-8')
+        print(f"Decoded: {decoded}", flush=True)
         response_data = json.loads(decoded)
-        status        = response_data.get('status')
+        status = response_data.get('status')
+        print(f"Status: {status}", flush=True)
 
         if status == 'COMPLETE':
-            order.status         = 'paid'
+            order.status = 'paid'
             order.transaction_id = response_data.get('transaction_code')
             order.save()
-            request.session['cart']     = {}
+            request.session['cart'] = {}
             request.session['order_id'] = None
         else:
             order.status = 'failed'
             order.save()
-    except Exception:
+
+    except Exception as e:
+        print(f"ERROR: {e}", flush=True)
         order.status = 'failed'
         order.save()
 
@@ -195,9 +180,16 @@ def payment_failure(request):
     order_id = request.session.get('order_id')
     order = None
     if order_id:
-        order        = get_object_or_404(Order, id=order_id)
+        order = get_object_or_404(Order, id=order_id)
         order.status = 'failed'
         order.save()
+
+    # Debug - print everything
+    print(f"=== Payment Failure ===", flush=True)
+    print(f"GET params: {request.GET}", flush=True)
+    print(f"Order ID: {order_id}", flush=True)
+    print("======================", flush=True)
+
     return render(request, 'store/payment_failure.html', {'order': order})
 
 def register_view(request):

@@ -9,7 +9,6 @@ urlpatterns = [
     path('cart/remove/<int:pk>/', views.cart_remove, name='cart_remove'),
     path('checkout/', views.checkout, name='checkout'),
     path('payment/esewa/', views.esewa_pay, name='esewa_pay'),
-    path('payment/mock-gateway/', views.esewa_mock_gateway, name='esewa_mock_gateway'),
     path('payment/success/', views.payment_success, name='payment_success'),
     path('payment/failure/', views.payment_failure, name='payment_failure'),
     path('register/', views.register_view, name='register'),
