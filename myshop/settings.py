@@ -135,3 +135,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 ESEWA_PRODUCT_CODE = 'EPAYTEST'
 ESEWA_SECRET_KEY   = '8gBm/:&EnhH.1/q'
 ESEWA_PAYMENT_URL  = '/payment/mock-gateway/'
+
+SITE_URL = os.environ.get('SITE_URL', 'http://127.0.0.1:8000')
