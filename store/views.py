@@ -127,8 +127,8 @@ def esewa_pay(request):
         'product_code'            : settings.ESEWA_PRODUCT_CODE,
         'product_service_charge'  : '0',
         'product_delivery_charge' : '0',
-        'success_url'             : 'http://127.0.0.1:8000/payment/success/',
-        'failure_url'             : 'http://127.0.0.1:8000/payment/failure/',
+        'success_url'             : f"{settings.SITE_URL}/payment/success/",
+        'failure_url'             : f"{settings.SITE_URL}/payment/failure/",
         'signed_field_names'      : 'total_amount,transaction_uuid,product_code',
         'signature'               : signature,
     }
