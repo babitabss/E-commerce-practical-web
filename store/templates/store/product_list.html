@@ -1,0 +1,26 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<h1 style="margin-bottom:1.5rem;">Our Products</h1>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.5rem;">
+  {% for product in products %}
+  <div style="background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:200px;object-fit:cover;">
+    {% else %}
+      <div style="width:100%;height:200px;background:#ddd;display:flex;align-items:center;justify-content:center;color:#999;">No Image</div>
+    {% endif %}
+    <div style="padding:1rem;">
+      <h2 style="font-size:1.1rem;margin-bottom:0.5rem;">{{ product.name }}</h2>
+      <p style="color:#666;font-size:0.9rem;margin-bottom:0.8rem;">{{ product.description|truncatewords:15 }}</p>
+      <p style="font-size:1.2rem;font-weight:bold;color:#27ae60;margin-bottom:1rem;">Rs. {{ product.price }}</p>
+      <a href="{% url 'product_detail' product.pk %}" class="btn">View Details</a>
+    </div>
+  </div>
+  {% empty %}
+    <p>No products available yet.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

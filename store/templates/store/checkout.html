@@ -1,0 +1,47 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<h1 style="margin-bottom:1.5rem;">Checkout</h1>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+  <div style="background:white;padding:1.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+    <h2 style="margin-bottom:1rem;">Your Details</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
+        <input type="text" name="full_name" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;font-size:1rem;">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;margin-bottom:5px;font-weight:bold;">Email</label>
+        <input type="email" name="email" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;font-size:1rem;">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone</label>
+        <input type="text" name="phone" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;font-size:1rem;">
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
+        <textarea name="address" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;font-size:1rem;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-green" style="width:100%;padding:12px;font-size:1.1rem;">Pay with eSewa</button>
+      
+    </form>
+  </div>
+
+  <div style="background:white;padding:1.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+    <h2 style="margin-bottom:1rem;">Order Summary</h2>
+    {% for item in cart_items %}
+    <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #eee;">
+      <span>{{ item.product.name }} x{{ item.quantity }}</span>
+      <span>Rs. {{ item.subtotal }}</span>
+    </div>
+    {% endfor %}
+    <div style="display:flex;justify-content:space-between;padding:1rem 0;font-size:1.2rem;font-weight:bold;">
+      <span>Total</span>
+      <span style="color:#27ae60;">Rs. {{ total }}</span>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

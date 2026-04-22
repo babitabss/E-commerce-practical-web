@@ -1,0 +1,323 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyShop Nepal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #333; }
+
+    /* Navbar */
+    nav {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 65px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .nav-brand span { color: #e94560; }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.1); color: white; }
+    .nav-cart {
+      background: #e94560 !important;
+      color: white !important;
+      font-weight: 600;
+      padding: 8px 16px !important;
+    }
+    .nav-cart:hover { background: #c73652 !important; }
+    .nav-user { color: rgba(255,255,255,0.6) !important; font-size: 0.85rem !important; }
+
+    /* Messages */
+    .messages { padding: 0 2rem; margin-top: 1rem; }
+    .message {
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .message.success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .message.error   { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+    .message.info    { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+
+    /* Container */
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 5rem 2rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 60%);
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      position: relative;
+      line-height: 1.2;
+    }
+    .hero h1 span { color: #e94560; }
+    .hero p {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; position: relative; }
+    .btn-hero-primary {
+      background: #e94560;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s;
+      border: 2px solid #e94560;
+    }
+    .btn-hero-primary:hover { background: transparent; color: #e94560; }
+    .btn-hero-secondary {
+      background: transparent;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 2px solid rgba(255,255,255,0.5);
+      transition: all 0.3s;
+    }
+    .btn-hero-secondary:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 10px 22px;
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-green  { background: #27ae60; }
+    .btn-red    { background: #e94560; }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #1a1a2e;
+      color: #1a1a2e;
+    }
+    .btn-outline:hover { background: #1a1a2e; color: white; }
+
+    /* Product Cards */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+    .product-no-img {
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(135deg, #f0f2f5, #e0e4ea);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 3rem;
+    }
+    .product-body { padding: 1.2rem; }
+    .product-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #1a1a2e;
+    }
+    .product-desc {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #e94560;
+    }
+    .product-price span {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #999;
+    }
+    .badge-stock {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #27ae60;
+      color: white;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* Section headings */
+    .section-title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .section-title h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 0.5rem;
+    }
+    .section-title p { color: #888; font-size: 1rem; }
+    .section-title .underline {
+      width: 60px;
+      height: 4px;
+      background: #e94560;
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    
+
+    /* Footer */
+    footer {
+      background: #1a1a2e;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+    }
+    footer strong { color: #e94560; }
+
+    /* Forms */
+    .form-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      max-width: 480px;
+      margin: auto;
+    }
+    .form-card h1 { font-size: 1.8rem; color: #1a1a2e; margin-bottom: 0.3rem; }
+    .form-card p { color: #888; margin-bottom: 2rem; font-size: 0.9rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #555; margin-bottom: 6px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #e0e4ea;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border 0.2s;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: #e94560; }
+    .form-errors { color: #e94560; font-size: 0.8rem; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="{% url 'product_list' %}" class="nav-brand">My<span>Shop</span></a>
+  <div class="nav-links">
+    {% if user.is_authenticated %}
+      <a href="{% url 'order_history' %}">My Orders</a>
+      <span class="nav-user">Hi, {{ user.first_name|default:user.username }}!</span>
+      <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+    <a href="{% url 'cart_detail' %}" class="nav-cart">
+      Cart ({{ request.session.cart|length }})
+    </a>
+  </div>
+</nav>
+
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+    <div class="message {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block hero %}{% endblock %}
+
+
+
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+
+<footer>
+  <p>Made with love in Nepal &nbsp;|&nbsp; <strong>MyShop</strong> &copy; 2026</p>
+</footer>
+
+</body>
+</html>

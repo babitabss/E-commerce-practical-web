@@ -1,0 +1,11 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div style="text-align:center;background:white;padding:3rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);max-width:500px;margin:auto;">
+  <div style="font-size:4rem;margin-bottom:1rem;">✓</div>
+  <h1 style="color:#27ae60;margin-bottom:1rem;">Payment Successful!</h1>
+  <p style="color:#666;margin-bottom:0.5rem;">Thank you, <strong>{{ order.full_name }}</strong>!</p>
+  <p style="color:#666;margin-bottom:0.5rem;">Order ID: <strong>#{{ order.id }}</strong></p>
+  <p style="color:#666;margin-bottom:1.5rem;">Amount Paid: <strong>Rs. {{ order.total_amount }}</strong></p>
+  <a href="{% url 'product_list' %}" class="btn btn-green">Continue Shopping</a>
+</div>
+{% endblock %}

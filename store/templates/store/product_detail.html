@@ -1,0 +1,21 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<div style="background:white;border-radius:8px;padding:2rem;box-shadow:0 2px 8px rgba(0,0,0,0.1);max-width:600px;margin:auto;">
+  {% if product.image %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:300px;object-fit:cover;border-radius:8px;margin-bottom:1.5rem;">
+  {% endif %}
+  <h1 style="margin-bottom:0.5rem;">{{ product.name }}</h1>
+  <p style="color:#666;margin-bottom:1rem;">{{ product.description }}</p>
+  <p style="font-size:1.5rem;font-weight:bold;color:#27ae60;margin-bottom:0.5rem;">Rs. {{ product.price }}</p>
+  <p style="color:#999;margin-bottom:1.5rem;">Stock: {{ product.stock }} left</p>
+
+  <form method="post" action="{% url 'cart_add' product.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-green">Add to Cart</button>
+  </form>
+  <br>
+  <a href="{% url 'product_list' %}" class="btn">Back to Products</a>
+</div>
+
+{% endblock %}

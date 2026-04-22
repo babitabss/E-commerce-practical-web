@@ -1,0 +1,9 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div style="text-align:center;background:white;padding:3rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);max-width:500px;margin:auto;">
+  <div style="font-size:4rem;margin-bottom:1rem;">✗</div>
+  <h1 style="color:#e74c3c;margin-bottom:1rem;">Payment Failed!</h1>
+  <p style="color:#666;margin-bottom:1.5rem;">Something went wrong with your payment. Please try again.</p>
+  <a href="{% url 'cart_detail' %}" class="btn btn-red">Back to Cart</a>
+</div>
+{% endblock %}
