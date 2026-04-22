@@ -120,19 +120,18 @@ def esewa_pay(request):
     order.save()
 
     esewa_data = {
-        'amount'                  : total_amount,
-        'tax_amount'              : '0',
-        'total_amount'            : total_amount,
-        'transaction_uuid'        : transaction_uuid,
-        'product_code'            : settings.ESEWA_PRODUCT_CODE,
-        'product_service_charge'  : '0',
-        'product_delivery_charge' : '0',
-        'success_url'             : f"{settings.SITE_URL}/payment/success/",
-        'failure_url'             : f"{settings.SITE_URL}/payment/failure/",
-        'signed_field_names'      : 'total_amount,transaction_uuid,product_code',
-        'signature'               : signature,
-    }
-
+    'amount'                  : total_amount,
+    'tax_amount'              : '0',
+    'total_amount'            : total_amount,
+    'transaction_uuid'        : transaction_uuid,
+    'product_code'            : settings.ESEWA_PRODUCT_CODE,
+    'product_service_charge'  : '0',
+    'product_delivery_charge' : '0',
+    'success_url'             : 'https://web-production-9d9bd.up.railway.app/payment/success/',
+    'failure_url'             : 'https://web-production-9d9bd.up.railway.app/payment/failure/',
+    'signed_field_names'      : 'total_amount,transaction_uuid,product_code',
+    'signature'               : signature,
+}
     return render(request, 'store/esewa_pay.html', {
         'esewa_data': esewa_data,
         'esewa_url' : settings.ESEWA_PAYMENT_URL,
